@@ -15,22 +15,22 @@ def start_appointment(
     Start an appointment by updating queue ticket status
     """
     try:
-        print(f"Ticket ID: {request.ticket_id}")
+        # print(f"Ticket ID: {request.ticket_id}")
         # Step 1: Find queue ticket
         ticket = db.query(QueueTicket).filter(
             QueueTicket.ticket_id == request.ticket_id
         ).first()
         
         if not ticket:
-            print(f"Ticket #{request.ticket_id} not found")
+            # print(f"Ticket #{request.ticket_id} not found")
             return False, "Queue ticket not found", {}
         
-        print(f"Found ticket #{ticket.ticket_id}")
-        print(f"   Current status: {ticket.queue_status}")
+        # print(f"Found ticket #{ticket.ticket_id}")
+        # print(f"   Current status: {ticket.queue_status}")
         
         # Step 2: Validate current status
         if ticket.queue_status not in ['WAITING', 'CALLED']:
-            print(f"Invalid status: {ticket.queue_status}")
+            # print(f"Invalid status: {ticket.queue_status}")
             return False, f"Cannot start appointment. Current status: {ticket.queue_status}", {}
         
         # Step 3: Get visit details
@@ -39,10 +39,10 @@ def start_appointment(
         ).first()
         
         if not visit:
-            print(f"Visit #{ticket.visit_id} not found")
+            # print(f"Visit #{ticket.visit_id} not found")
             return False, "Visit not found", {}
         
-        print(f"Found visit #{visit.visit_id}")
+        # print(f"Found visit #{visit.visit_id}")
         
         # Step 4: Get patient details
         patient = db.query(Patient).filter(
@@ -50,11 +50,11 @@ def start_appointment(
         ).first()
         
         if not patient:
-            print(f"Patient #{visit.patient_id} not found")
+            # print(f"Patient #{visit.patient_id} not found")
             return False, "Patient not found", {}
         
         patient_name = f"{patient.first_name} {patient.last_name}"
-        print(f"Found patient: {patient_name}")
+        # print(f"Found patient: {patient_name}")
         
         # Step 5: Update queue ticket
         old_status = ticket.queue_status
@@ -69,9 +69,8 @@ def start_appointment(
         # Step 7: Commit changes
         db.commit()
         
-        print(f"Status updated: {old_status} → IN_PROGRESS")
-        print(f"Started at: {ticket.started_at}")
-        print("="*60 + "\n")
+        # print(f"Status updated: {old_status} → IN_PROGRESS")
+        # print(f"Started at: {ticket.started_at}")
         
         return True, "Appointment started successfully", {
             "ticket_id": ticket.ticket_id,
@@ -95,8 +94,8 @@ def verify_otp_and_checkin(
     Verify OTP and complete check-in process
     """
     try:
-        print(f"Phone: {request.phone_number}")
-        print(f"Code: {request.otp_code}")
+        # print(f"Phone: {request.phone_number}")
+        # print(f"Code: {request.otp_code}")
         
         # Step 1: Find valid OTP
         otp_record = db.query(OTPVerification).filter(
@@ -128,7 +127,7 @@ def verify_otp_and_checkin(
         if not patient:
             return False, "Patient not found", {}
         
-        print(f"Patient: {patient.first_name} {patient.last_name}")
+        # print(f"Patient: {patient.first_name} {patient.last_name}")
         
         # Step 4: Mark OTP as verified
         otp_record.is_verified = True
@@ -173,7 +172,7 @@ def verify_otp_and_checkin(
         db.add(new_visit)
         db.flush()
         
-        print(f"Created visit #{new_visit.visit_id}")
+        # print(f"Created visit #{new_visit.visit_id}")
         
         # Step 7: Calculate queue position
         max_position = db.query(func.max(QueueTicket.queue_position)).filter(
@@ -193,8 +192,8 @@ def verify_otp_and_checkin(
         average_service_time = department.average_service_time if department else 30
         estimated_wait = (new_position - 1) * average_service_time
         
-        print(f"Queue position: {new_position}")
-        print(f"Estimated wait: {estimated_wait} minutes")
+        # print(f"Queue position: {new_position}")
+        # print(f"Estimated wait: {estimated_wait} minutes")
         
         # Step 9: Create queue ticket
         queue_ticket = QueueTicket(
@@ -207,7 +206,7 @@ def verify_otp_and_checkin(
         db.add(queue_ticket)
         db.flush()
         
-        print(f"Created ticket #{queue_ticket.ticket_id}")
+        # print(f"Created ticket #{queue_ticket.ticket_id}")
         
         # Commit all changes
         db.commit()
@@ -222,9 +221,9 @@ def verify_otp_and_checkin(
         
     except Exception as e:
         db.rollback()
-        print(f"Error: {str(e)}")
+        # print(f"Error: {str(e)}")
         import traceback
-        print(traceback.format_exc())
+        # print(traceback.format_exc())
         return False, f"Error during check-in: {str(e)}", {}
     
 # Helper functions
@@ -238,5 +237,6 @@ def send_sms(phone_number: str, message: str):
     TODO: Implement with Twilio
     For now, just print to console
     """
-    print(f"📱 SMS to {phone_number}: {message}")
+    # print(f"📱 SMS to {phone_number}: {message}")
     return True
+
