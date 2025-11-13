@@ -30,20 +30,25 @@ app.add_middleware(
 app.include_router(apiRouter.router)
 # Include routers
 
+
+#USE MAIN FOR TESTING NOT FOR PRODUCTION CODE, COMMENT BEFOR PUSHING
+#USE THIS command TO RUN MAIN
+# uvicorn main:app --reload
         
-if __name__ == "__main__":
+# if __name__ == "__main__":
     
-    # Get the directory of this file
-    current_dir = os.path.dirname(os.path.abspath(__file__))
+#     # Get the directory of this file
+#     current_dir = os.path.dirname(os.path.abspath(__file__))
     
-    # Add to Python path if needed
-    if current_dir not in sys.path:
-        sys.path.insert(0, current_dir)
+#     # Add to Python path if needed
+#     if current_dir not in sys.path:
+#         sys.path.insert(0, current_dir)
     
-    # Run the server
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=True
-    )
+#     # Run the server
+#     uvicorn.run(
+#         "main:app",
+#         host="0.0.0.0",
+#         port=8000,
+#         reload=True
+#     )
+
