@@ -56,7 +56,7 @@ async def verify_otp(
     Verify OTP and complete patient check-in
     
     - **phone_number**: Patient's registered phone number
-    - **otp_code**: 6-digit OTP code sent to patient
+    - **otp_code**: 4-digit OTP code sent to patient
     - **department_id**: Optional department ID for check-in
     - **doctor_id**: Optional doctor ID for appointment
     - **check_in_method**: Method used for check-in (default: OTP)
@@ -266,7 +266,7 @@ def send_otp(request: OTPSendRequest, db: db_dependency): # type: ignore
             expires_at=existing_otp.expires_at.isoformat()
         )
     
-    # Generate 6-digit OTP
+    # Generate 4-digit OTP
     otp_code = str(random.randint(1000, 9999))
     # Set expiration (5 minutes from now)
     expires_at = datetime.now() + timedelta(minutes=5)
